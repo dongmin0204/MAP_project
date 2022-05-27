@@ -45,21 +45,12 @@ void printMenu(void) {
     cout << "------------------------------" << endl;
 }
 
-void addStudent(Student student[15]) {
-    for (int i = 0; i < 15; i++) {
-        string name;
-        cin >> name;
-        student[i].name = name;
-    }
-}
-
 void addfstudent(Student student[15]) {
-
     vector<vector<string>> content;
     vector<string> row;
     string line, word;
 
-    fstream file("test.csv", ios::in);
+    fstream file("name.csv", ios::in);
     if (file.is_open())
     {
         while (getline(file, line))
@@ -74,7 +65,7 @@ void addfstudent(Student student[15]) {
         }
     }
     else
-        cout << "Could not open the file\n";
+        cout << "파일을 찾지 못했습니다..." << endl;
 
     for (int i = 0; i < content.size(); i++)
     {
@@ -86,8 +77,6 @@ int main() {
     Student student[15];
     int cmd = 0;
 
-    
-
     do {
         printMenu();
         cout << "메뉴 선택 >> ";
@@ -95,7 +84,7 @@ int main() {
         switch (cmd) {
         case 1:
             cout << "1. 성적 입력" << endl;
-            cout << "test.csv 파일을 읽어 오겠습니다... " << endl;
+            cout << "학생 명단을 불러오는 중입니다... " << endl;
             addfstudent(student);
             for (int i = 0; i < 15; i++) { cout << student[i].name << " "; }
             cout << endl;
