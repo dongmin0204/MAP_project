@@ -78,7 +78,7 @@ void addfstudent(Student student[15]) {
 
     for (int i = 0; i < content.size(); i++)
     {
-        student[i].name = content[i][1];
+        student[i].name = content[i+1][1];
     }
 }
 
