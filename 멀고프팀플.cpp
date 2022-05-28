@@ -8,6 +8,7 @@ using namespace std;
 
 class Subject {
 public:
+    string name;
     string type; //전공,교양 구분
     int score; //원점수
     int semester; //학기
@@ -31,7 +32,8 @@ void Subject::Grading() {
 class Student {
 public:
     string name;
-    Subject* sbj = new Subject;
+    Subject* sbj;
+    int sbjSize;
 };
 
 void printMenu(void) {
@@ -50,7 +52,7 @@ void addfstudent(Student student[15]) {
     vector<string> row;
     string line, word;
 
-    fstream file("name.csv", ios::in);
+    fstream file("name.CSV", ios::in);
     if (file.is_open())
     {
         while (getline(file, line))
@@ -67,10 +69,18 @@ void addfstudent(Student student[15]) {
     else
         cout << "파일을 찾지 못했습니다..." << endl;
 
-    for (int i = 0; i < content.size(); i++)
+    for (int i = 1; i < content.size(); i++)
     {
-        student[i].name = content[i+1][1];
+        student[i - 1].name = content[i][1];
+        student[i - 1].sbjSize = content[i].size() - 2;
+        student[i - 1].sbj = new Subject[content[i].size() - 2];
+        
+        for (int j = 2; j < content[i].size(); j++) {
+            student[i - 1].sbj[j-2].name = content[0][j];
+            student[i - 1].sbj[j-2].score = stoi(content[i][j]);
+        }
     }
+    file.close();
 }
 
 int main() {
@@ -86,7 +96,21 @@ int main() {
             cout << "1. 성적 입력" << endl;
             cout << "학생 명단을 불러오는 중입니다... " << endl;
             addfstudent(student);
-            for (int i = 0; i < 15; i++) { cout << student[i].name << " "; }
+
+            cout << "이름  ";
+
+            for (int i = 0; i < student[0].sbjSize; i++) {
+                cout << student[0].sbj[i].name << " ";
+            }
+            cout << endl;
+
+            for (int i = 0; i < 15; i++) { 
+                cout << student[i].name << " : ";
+                for (int j = 0; j < student[i].sbjSize; j++) {
+                    cout << student[i].sbj[j].score << "  ";
+                }
+                cout << endl;
+            }
             cout << endl;
             break;
         case 2:
@@ -111,4 +135,3 @@ int main() {
     cout << "프로그램을 종료합니다." << endl;
 
     return 0;
-}
