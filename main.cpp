@@ -8,84 +8,68 @@
 
 using namespace std;
 
-class Subject {
+class Subject { //ê³¼ëª© í´ë˜ìŠ¤
 public:
-    string name;
-    string type; //Àü°ø,±³¾ç ±¸ºĞ
-    int score; //¿øÁ¡¼ö
-    int semester; //ÇĞ±â( 1 / 2 )
-    string grade; //ÇĞÁ¡
-    void Grading();
-    float getGrade() {
-        if (grade == "F") return 0.0;
-
-        else {
-            float temp = float(69 - grade[0]);//4,3,2,1À» °áÁ¤
-            if (grade[1] == '+') temp += 0.5;//n.5Á¡ or n.0Á¡ °áÁ¤
-            return temp;
-        }
-    }
+    string name; //ê³¼ëª©ì´ë¦„
+    string type; //ì „ê³µ,êµì–‘ êµ¬ë¶„
+    int score; //ì›ì ìˆ˜
+    int semester; //í•™ê¸°( 1 / 2 )
+    float grade; //í•™ì 
+    void Grading(); //í•™ì  ê³„ì‚° í•¨ìˆ˜
 };
 
 void Subject::Grading() {
     if (score >= 95)
-        grade = "A+"; //4.5
+        grade = 4.5; //A+
     else if (score >= 90)
-        grade = "A0"; //4.0
+        grade = 4.0; //A0
     else if (score >= 85)
-        grade = "B+"; //3.5
+        grade = 3.5; //B+
     else if (score >= 80)
-        grade = "B0"; //3.0
+        grade = 3.0; //B0
     else if (score >= 75)
-        grade = "C+"; //2.5
+        grade = 2.5; //C+
     else if (score >= 70)
-        grade = "C0"; //2.0
+        grade = 2.0; //C0;
     else if (score >= 65)
-        grade = "D+"; //1.0
+        grade = 1.5; //D+
     else if (score >= 60)
-        grade = "D0"; //0.5
+        grade = 1.0; //D0
     else
-        grade = "F"; // 0.0
+        grade = 0.0; //F
 }
 
 class Student {
 public:
-    string name;
-
-    Subject* sbj;
-    int sbjSize;
-    float totalGrade;
-    int rank;
-
-    Student() {
-        rank = 1;
-    }
+    string name; //í•™ìƒì´ë¦„
+    Subject* sbj; //ê³¼ëª© ê°ì²´
+    int sbjSize; //ê³¼ëª© í¬ê¸°
+    float totalGrade_1 = 0; //1í•™ê¸° í•™ì 
+    float totalGrade_2 = 0; //2í•™ê¸° í•™ì 
+    int rank_1 = 1; //1í•™ê¸° ì„ì°¨ ì´ˆê¸°í™”
+    int rank_2 = 1; //2í•™ê¸° ì„ì°¨ ì´ˆê¸°í™”
 };
 
 void printMenu(void) {
     cout << "------------------------------" << endl;
-    cout << "1. ¼ºÀû ÀÔ·Â" << endl;
-    cout << "2. °³ÀÎ ¼ºÀû Ãâ·Â" << endl;
-    cout << "3. ÀüÃ¼ ¼ºÀû Ãâ·Â" << endl;
-    cout << "4. ÇĞ±â º° µî¼ö Ãâ·Â" << endl;
-    cout << "5. °ú¸ñº° »óÀ§ 3¸í Ãâ·Â" << endl;
-    cout << "6. Á¾·á" << endl;
+    cout << "1. ì„±ì  ì…ë ¥" << endl;
+    cout << "2. ê°œì¸ ì„±ì  ì¶œë ¥" << endl;
+    cout << "3. ì „ì²´ ì„±ì  ì¶œë ¥" << endl;
+    cout << "4. í•™ê¸° ë³„ ë“±ìˆ˜ ì¶œë ¥" << endl;
+    cout << "5. ê³¼ëª©ë³„ ìƒìœ„ 3ëª… ì¶œë ¥" << endl;
+    cout << "6. ì¢…ë£Œ" << endl;
     cout << "------------------------------" << endl;
 }
 
-void addfstudent(Student student[15],bool& is_exist) {
+void addfstudent(Student student[15], bool& is_exist) {
     vector<vector<string>> content;
     vector<string> row;
     string line, word;
 
-    string temp;
-    int semester;
-
+    //íŒŒì¼ ë¶ˆëŸ¬ì˜¤ê¸°
     fstream file("name.CSV", ios::in);
-    if (file.is_open())
-    {
-        while (getline(file, line))
-        {
+    if (file.is_open()){
+        while (getline(file, line)){
             row.clear();
 
             stringstream str(line);
@@ -95,211 +79,235 @@ void addfstudent(Student student[15],bool& is_exist) {
             content.push_back(row);
         }
     }
-    else
-    {
-        cout << "ÆÄÀÏÀ» Ã£Áö ¸øÇß½À´Ï´Ù..." << endl; 
+    else{
+        cout << "íŒŒì¼ì„ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤..." << endl;
         is_exist = false;
         return;
     }
 
-    do {
-        cout << "ÇĞ±â¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä(1 or 2) >> ";
-        cin >> semester;
-        if (semester != 1 && semester != 2) { cout << "´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä... " << endl; }
-    } while (semester != 1 && semester != 2);
-
-    for (int i = 1; i < content.size(); i++)
-    {
+    //ë¶ˆëŸ¬ì˜¨ íŒŒì¼ ë‚´ìš©ì„ student, subject ê°ì²´ì— í• ë‹¹í•˜ê¸°
+    for (int i = 1; i < content.size(); i++){
         student[i - 1].name = content[i][1];
         student[i - 1].sbjSize = content[i].size() - 2;
         student[i - 1].sbj = new Subject[content[i].size() - 2];
 
-        for (int j = 2; j < content[i].size(); j++) {
-            if (content[0][j][0] != '_') {
-                student[i - 1].sbj[j - 2].type = "±³¾ç";
-                student[i - 1].sbj[j - 2].name = content[0][j];
+        for (int j = 2; j < content[i].size(); j++){ //ì „ê³µ,êµì–‘ êµ¬ë¶„
+            if (content[0][j][0] != '_'){
+                student[i - 1].sbj[j - 2].type = "êµì–‘";
+                student[i - 1].sbj[j - 2].name = content[0][j].substr(0, content[0][j].length() - 1);
+                student[i - 1].sbj[j - 2].semester = stoi(content[0][j].substr(content[0][j].length()-1,content[0][j].length())); //í•™ê¸° êµ¬ë¶„
             }
             else {
-                student[i - 1].sbj[j - 2].type = "Àü°ø";
-                temp = content[0][j].substr(1, content[0][j].length() - 1);
-                student[i - 1].sbj[j - 2].name = temp;
+                student[i - 1].sbj[j - 2].type = "ì „ê³µ";
+                student[i - 1].sbj[j - 2].name = content[0][j].substr(1, content[0][j].length() - 2);
+                student[i - 1].sbj[j - 2].semester = stoi(content[0][j].substr(content[0][j].length() - 1, content[0][j].length())); //í•™ê¸° êµ¬ë¶„
             }
 
-            student[i - 1].sbj[j - 2].semester = semester;
-            student[i - 1].sbj[j - 2].score = stoi(content[i][j]);
-            student[i - 1].sbj[j - 2].Grading();
-            student[i - 1].totalGrade += student[i - 1].sbj[j - 2].getGrade();
+            student[i - 1].sbj[j - 2].score = stoi(content[i][j]); //ì›ì ìˆ˜ í• ë‹¹
+            student[i - 1].sbj[j - 2].Grading(); //í•™ì ìœ¼ë¡œ ë³€í™˜
+    
+            if(student[i - 1].sbj[j - 2].semester == 1) //1í•™ê¸°
+                student[i - 1].totalGrade_1 += student[i - 1].sbj[j - 2].grade;
+            else if(student[i - 1].sbj[j - 2].semester == 2) //2í•™ê¸°
+                student[i - 1].totalGrade_2 += student[i - 1].sbj[j - 2].grade;
         }
     }
 
-    for (int i = 0; i < 14; i++) //¼®Â÷ ±¸ÇÏ±â
-    {
-        for (int j = i; j < 15; j++)
-        {
-            if (student[i].totalGrade == student[j].totalGrade)
-            {
+    for (int i = 0; i < 14; i++){ //ì„ì°¨êµ¬í•˜ê¸°
+        for (int j = i; j < 15; j++){
+            //1í•™ê¸°
+            if (student[i].totalGrade_1 == student[j].totalGrade_1){
                 continue;
             }
-            else if (student[i].totalGrade < student[j].totalGrade)
-                student[i].rank += 1;
-            else
-                student[j].rank += 1;
+            else if (student[i].totalGrade_1 < student[j].totalGrade_1){
+                student[i].rank_1 += 1;
+            }
+            else{
+                student[j].rank_1 += 1;
+            }
+            //2í•™ê¸°
+            if (student[i].totalGrade_2 == student[j].totalGrade_2){
+                continue;
+            }
+            else if (student[i].totalGrade_2 < student[j].totalGrade_2){
+                student[i].rank_2 += 1;
+            }
+            else {
+                student[j].rank_2 += 1;
+            }
         }
     }
 
     file.close();
     is_exist = true;
-    cout << "ÆÄÀÏ ÀĞ±â ¿Ï·á ... " << endl;
-}
-
-void insertHeap(Student** h, Student* student, int& size) {
-    int i;
-    i = ++size;
-    while ((i != 1) && (student->rank < h[i / 2]->rank)) {
-        h[i] = h[i / 2];
-        i /= 2;
-    }
-    h[i] = student;
-}
-
-Student* deleteHeap(Student** h, int& size) {
-    int parent, child;
-    Student* item, * temp;
-
-    item = h[1];
-    temp = h[--size];
-    parent = 1; child = 2;
-
-    while (child <= size) {
-        if ((child < size) && (h[child]->rank > h[child + 1]->rank)) child++;
-
-        if (temp->rank <= h[child]->rank) { break; }
-        else {
-            h[parent] = h[child];
-            parent = child;
-            child = child * 2;
-        }
-    }
-    h[parent] = temp;
-    return item;
+    cout << "íŒŒì¼ ì½ê¸° ì™„ë£Œ ... " << endl;
 }
 
 int main() {
     Student student[15];
-
-    Student* heap[16]; //µî¼ö¸¦ ±âÁØÀ¸·Î Á¤·ÄÇÏ°í Ãâ·ÂÇÒ ÃÖ¼Ò Èü
-    int heap_size = 0;
-
     bool is_file_exist = false;
-
-    int cmd = 0;
+    int cmd = 0; //ë©”ë‰´ ì„ íƒ ë³€ìˆ˜
+    int namecheck = 0;
     string studentName;
-
 
     do {
         printMenu();
-        cout << "¸Ş´º ¼±ÅÃ >> ";
+        cout << "ë©”ë‰´ ì„ íƒ >> ";
         cin >> cmd;
         switch (cmd) {
+
         case 1:
-            cout << "1. ¼ºÀû ÀÔ·Â" << endl;
-            cout << "ÇĞ»ı ¸í´ÜÀ» ºÒ·¯¿À´Â ÁßÀÔ´Ï´Ù... " << endl;
+            cout << "1. ì„±ì  ì…ë ¥" << endl;
 
+            cout << "í•™ìƒ ëª…ë‹¨ì„ ë¶ˆëŸ¬ì˜¤ëŠ” ì¤‘ì…ë‹ˆë‹¤... " << endl;
             addfstudent(student, is_file_exist);
-
+            cout << endl;
             break;
-        case 2:
-            cout << "2. °³ÀÎ ¼ºÀû Ãâ·Â" << endl;
 
-            if (!(is_file_exist)) { 
-                cout << "ÇĞ»ı ¸í´ÜÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù..." << endl; 
-                continue; 
+        case 2:
+            cout << "2. ê°œì¸ ì„±ì  ì¶œë ¥" << endl;
+
+            if (!(is_file_exist)) {
+                cout << "í•™ìƒ ëª…ë‹¨ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤..." << endl;
+                continue;
             }
 
-            cout << "ÇĞ»ı ÀÌ¸§À» ÀÔ·ÂÇØÁÖ¼¼¿ä >> ";
-            cin >> studentName;
+            do {
+                cout << "í•™ìƒ ì´ë¦„ì„ ì…ë ¥í•´ì£¼ì„¸ìš” >> ";
+                cin >> studentName;
+                for (int i = 0; i < 15; i++) {
+                    if (student[i].name == studentName) {
+                        namecheck = 1;
+                        break;
+                    }
+                }
+                if (namecheck == 0) {
+                    cout << "ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš” ..." << endl;
+                }
+            } while (namecheck == 0);
 
-            cout << "ÀÌ¸§  ";
+            cout << "ê³¼ëª©:\t";
             for (int i = 0; i < student[0].sbjSize; i++) {
-                cout << student[0].sbj[i].name << "          ";
+                cout << student[0].sbj[i].name << "\t";
+            }
+            cout << "1í•™ê¸°\t2í•™ê¸°" << endl;
+            cout << "êµ¬ë¶„:\t";
+            for (int i = 0; i < student[0].sbjSize; i++) {
+                cout << student[0].sbj[i].type << "\t";
             }
             cout << endl;
+            cout << "í•™ê¸°\t";
+            for (int i = 0; i < student[0].sbjSize; i++) {
+                cout << student[0].sbj[i].semester << "\t";
+            }
+            cout << endl;
+            
             for (int i = 0; i < 15; i++) {
                 if (student[i].name == studentName) {
-                    cout << student[i].name << " : ";
+                    cout << student[i].name << ": ";
                     for (int j = 0; j < student[i].sbjSize; j++) {
-                        cout << student[i].sbj[j].score << "\t\t";
+                        cout << student[i].sbj[j].score << "\t";
                     }
-                    cout << endl;
+                    cout << student[i].totalGrade_1 << "\t" << student[i].totalGrade_2 << endl;
                 }
             }
             cout << endl;
             break;
-        case 3:
-            cout << "3. ÀüÃ¼ ¼ºÀû Ãâ·Â" << endl;
 
-            if (!(is_file_exist)) { 
-                cout << "ÇĞ»ı ¸í´ÜÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù..." << endl; 
-                continue; 
+        case 3:
+            cout << "3. ì „ì²´ ì„±ì  ì¶œë ¥" << endl;
+
+            if (!(is_file_exist)) {
+                cout << "í•™ìƒ ëª…ë‹¨ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤..." << endl;
+                continue;
             }
 
-            cout << "ÀÌ¸§  ";
+            cout << "ê³¼ëª©:\t";
             for (int i = 0; i < student[0].sbjSize; i++) {
-                cout << student[0].sbj[i].name << "          ";
+                cout << student[0].sbj[i].name << "\t";
+            }
+            cout << "1í•™ê¸°\t2í•™ê¸°" << endl;
+            cout << "êµ¬ë¶„:\t";
+            for (int i = 0; i < student[0].sbjSize; i++) {
+                cout << student[0].sbj[i].type << "\t";
             }
             cout << endl;
+            cout << "í•™ê¸°\t";
+            for (int i = 0; i < student[0].sbjSize; i++) {
+                cout << student[0].sbj[i].semester << "\t";
+            }
+            cout << endl;
+
             for (int i = 0; i < 15; i++) {
-                cout << student[i].name << " : ";
+                cout << student[i].name << ": ";
                 for (int j = 0; j < student[i].sbjSize; j++) {
-                    cout << student[i].sbj[j].score << "\t\t";
+                    cout << student[i].sbj[j].score << "\t";
+                }
+                cout << student[i].totalGrade_1 << "\t" << student[i].totalGrade_2 << endl;
+            }
+            cout << endl;
+            break;
+
+        case 4:
+            cout << "4. í•™ê¸° ë³„ ë“±ìˆ˜ ì¶œë ¥" << endl;
+
+            if (!(is_file_exist)) {
+                cout << "í•™ìƒ ëª…ë‹¨ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤..." << endl;
+                continue;
+            }
+
+            int semester;
+            do {
+                cout << "í•™ê¸°ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”(1 or 2) >> ";
+                cin >> semester;
+                if (semester != 1 && semester != 2) { cout << "ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”... " << endl; }
+            } while (semester != 1 && semester != 2);
+
+            cout << "ì´ë¦„\t";
+            for (int i = 0; i < student[0].sbjSize; i++) {
+                if (student[0].sbj[i].semester == semester)
+                    cout << student[0].sbj[i].name << "\t";
+                else
+                    continue;
+            }
+            cout << "ë“±ìˆ˜" << endl;
+            for (int i = 0; i < 15; i++) {
+                cout << student[i].name << ": ";
+                for (int j = 0; j < student[i].sbjSize; j++) {
+                    if (student[0].sbj[i].semester == semester)
+                        cout << student[0].sbj[i].score << "\t";
+                    else
+                        continue;
+                    cout << student[i].sbj[j].score << "\t";
+                }
+                if (semester == 1) { 
+                    cout << student[i].rank_1;
+                }
+                else if (semester == 2) {
+                    cout << student[i].rank_2;
                 }
                 cout << endl;
             }
             cout << endl;
-            break;
-        case 4:
-
-            if (!(is_file_exist)) { 
-                cout << "ÇĞ»ı ¸í´ÜÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù..." << endl; 
-                continue; 
-            }
-
-            for (int i = 0; i < 15; i++) {
-                insertHeap(heap, student+i, heap_size);
-            }
-
-            cout << "ÀÌ¸§  ";
-            for (int i = 0; i < heap[1]->sbjSize; i++) {
-                cout << heap[1]->sbj[i].name << "          ";
-            }
-            cout << "µî¼ö" << endl;
-            for (int i = 1; i < 16; i++) {
-                cout << heap[i]->name << " : ";
-                for (int j = 0; j < heap[i]->sbjSize; j++) {
-                    cout << heap[i]->sbj[j].score << "\t\t";
-                }
-                cout << heap[i]->rank << endl;
-            }
-            cout << endl;
 
             break;
-        case 5:
-            cout << "5. °ú¸ñº° »óÀ§ 3¸í Ãâ·Â" << endl;
+        case 5: //ë¯¸ì™„
+            cout << "5. ê³¼ëª©ë³„ ìƒìœ„ 3ëª… ì¶œë ¥" << endl;
 
-            if (!(is_file_exist)) { 
-                cout << "ÇĞ»ı ¸í´ÜÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù..." << endl; 
-                continue; 
+            if (!(is_file_exist)) {
+                cout << "í•™ìƒ ëª…ë‹¨ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤..." << endl;
+                continue;
             }
 
             break;
         case 6:
             break;
         default:
-            cout << "ÀÔ·Â ¿À·ù ! ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä..." << endl;
+            cout << "ì…ë ¥ ì˜¤ë¥˜ ! ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”..." << endl;
             break;
         }
     } while (cmd != 6);
-    cout << "ÇÁ·Î±×·¥À» Á¾·áÇÕ´Ï´Ù." << endl;
+    cout << "í”„ë¡œê·¸ë¨ì„ ì¢…ë£Œí•©ë‹ˆë‹¤." << endl;
 
     return 0;
 }
