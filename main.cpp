@@ -81,6 +81,7 @@ void addfstudent(Student student[15], bool& is_exist) {
     }
     else{
         cout << "파일을 찾지 못했습니다..." << endl;
+        cout << endl;
         is_exist = false;
         return;
     }
@@ -179,32 +180,35 @@ int main() {
             cout << "학생 명단을 불러오는 중입니다... " << endl;
             addfstudent(student, is_file_exist);
 
-            cout << "과목:\t";
-            for (int i = 0; i < student[0].sbjSize; i++) {
-                cout << student[0].sbj[i].name << "\t";
-            }
-            cout << "1학기\t2학기\t총평점" << endl;
-            cout << "구분:\t";
-            for (int i = 0; i < student[0].sbjSize; i++) {
-                cout << student[0].sbj[i].type << "\t";
-            }
-            cout << endl;
-            cout << "학기:\t";
-            for (int i = 0; i < student[0].sbjSize; i++) {
-                cout << student[0].sbj[i].semester << "\t";
-            }
-            cout << endl;
-
-            for (int i = 0; i < 15; i++) {
-                cout << student[i].name << ": ";
-                for (int j = 0; j < student[i].sbjSize; j++) {
-                    cout << student[i].sbj[j].score << "\t";
+            if ((is_file_exist)==1) {//파일을 불러온 경우 전체 원점수 성적 출력
+                cout << "과목:\t";
+                for (int i = 0; i < student[0].sbjSize; i++) {
+                    cout << student[0].sbj[i].name << "\t";
                 }
-                cout << (student[i].totalGrade_1) / 5.0 << "\t" << (student[i].totalGrade_2) / 5.0 << "\t";
-                cout << (student[i].totalGrade_1 + student[i].totalGrade_2) / 10.0 << endl;
+                cout << "1학기\t2학기\t총평점" << endl;
+                cout << "구분:\t";
+                for (int i = 0; i < student[0].sbjSize; i++) {
+                    cout << student[0].sbj[i].type << "\t";
+                }
+                cout << endl;
+                cout << "학기:\t";
+                for (int i = 0; i < student[0].sbjSize; i++) {
+                    cout << student[0].sbj[i].semester << "\t";
+                }
+                cout << endl;
+
+                for (int i = 0; i < 15; i++) {
+                    cout << student[i].name << ": ";
+                    for (int j = 0; j < student[i].sbjSize; j++) {
+                        cout << student[i].sbj[j].score << "\t";
+                    }
+                    cout << (student[i].totalGrade_1) / 5.0 << "\t" << (student[i].totalGrade_2) / 5.0 << "\t";
+                    cout << (student[i].totalGrade_1 + student[i].totalGrade_2) / 10.0 << endl;
+                }
+                cout << "출력 완료..." << endl;
+                cout << endl;
             }
-            cout << "출력 완료..." << endl;
-            cout << endl;
+
             break;
 
         case 2:
