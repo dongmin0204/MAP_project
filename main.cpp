@@ -208,7 +208,7 @@ int main() {
                     for (int j = 0; j < student[i].sbjSize; j++) {
                         cout << student[i].sbj[j].score << "\t";
                     }
-                    cout << student[i].totalGrade_1 << "\t" << student[i].totalGrade_2 << endl;
+                    cout << (student[i].totalGrade_1) / 5.0 << "\t" << (student[i].totalGrade_2) / 5.0 << endl;
                 }
             }
             cout << endl;
@@ -243,7 +243,7 @@ int main() {
                 for (int j = 0; j < student[i].sbjSize; j++) {
                     cout << student[i].sbj[j].score << "\t";
                 }
-                cout << student[i].totalGrade_1 << "\t" << student[i].totalGrade_2 << endl;
+                cout << (student[i].totalGrade_1)/5.0 << "\t" << (student[i].totalGrade_2)/5.0 << endl;
             }
             cout << endl;
             break;
@@ -278,7 +278,6 @@ int main() {
                         cout << student[0].sbj[i].score << "\t";
                     else
                         continue;
-                    cout << student[i].sbj[j].score << "\t";
                 }
                 if (semester == 1) { 
                     cout << student[i].rank_1;
