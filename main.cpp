@@ -4,7 +4,6 @@
 #include <vector>
 #include <map>
 #include <sstream>
-#include <Windows.h>
 
 using namespace std;
 
@@ -14,6 +13,7 @@ public:
     string type; //전공,교양 구분
     int score; //원점수
     int semester; //학기( 1 / 2 )
+    int sbjrnak = 1; //과목 석차 초기화
     float grade; //학점
     void Grading(); //학점 계산 함수
 };
@@ -53,8 +53,8 @@ public:
 void printMenu(void) {
     cout << "------------------------------" << endl;
     cout << "1. 성적 입력" << endl;
-    cout << "2. 개인 성적 출력" << endl;
-    cout << "3. 전체 성적 출력" << endl;
+    cout << "2. 개인 등수 출력" << endl;
+    cout << "3. 전체 등수 출력" << endl;
     cout << "4. 학기 별 등수 출력" << endl;
     cout << "5. 과목별 상위 3명 출력" << endl;
     cout << "6. 종료" << endl;
@@ -138,6 +138,22 @@ void addfstudent(Student student[15], bool& is_exist) {
         }
     }
 
+    for (int i = 0; i < student[0].sbjSize; i++) { //과목별 석차 계산
+        for (int j = 0; j < 14; j++) {
+            for (int k = j; k < 15; k++) {
+                if (student[j].sbj[i].score == student[k].sbj[i].score) {
+                    continue;
+                }
+                else if (student[j].sbj[i].score < student[k].sbj[i].score) {
+                    student[j].sbj[i].sbjrnak += 1;
+                }
+                else {
+                    student[k].sbj[i].sbjrnak += 1;
+                }
+            }
+        }
+    }
+
     file.close();
     is_exist = true;
     cout << "파일 읽기 완료 ... " << endl;
@@ -147,7 +163,8 @@ int main() {
     Student student[15];
     bool is_file_exist = false;
     int cmd = 0; //메뉴 선택 변수
-    int namecheck = 0;
+    int choicesbj = 0; //과목 선택 변수
+    int namecheck = 0; //이름 확인 변수
     string studentName;
 
     do {
@@ -161,6 +178,32 @@ int main() {
 
             cout << "학생 명단을 불러오는 중입니다... " << endl;
             addfstudent(student, is_file_exist);
+
+            cout << "과목:\t";
+            for (int i = 0; i < student[0].sbjSize; i++) {
+                cout << student[0].sbj[i].name << "\t";
+            }
+            cout << "1학기\t2학기\t총평점" << endl;
+            cout << "구분:\t";
+            for (int i = 0; i < student[0].sbjSize; i++) {
+                cout << student[0].sbj[i].type << "\t";
+            }
+            cout << endl;
+            cout << "학기:\t";
+            for (int i = 0; i < student[0].sbjSize; i++) {
+                cout << student[0].sbj[i].semester << "\t";
+            }
+            cout << endl;
+
+            for (int i = 0; i < 15; i++) {
+                cout << student[i].name << ": ";
+                for (int j = 0; j < student[i].sbjSize; j++) {
+                    cout << student[i].sbj[j].score << "\t";
+                }
+                cout << (student[i].totalGrade_1) / 5.0 << "\t" << (student[i].totalGrade_2) / 5.0 << "\t";
+                cout << (student[i].totalGrade_1 + student[i].totalGrade_2) / 10.0 << endl;
+            }
+            cout << "출력 완료..." << endl;
             cout << endl;
             break;
 
@@ -173,45 +216,151 @@ int main() {
             }
 
             do {
-                cout << "학생 이름을 입력해주세요 >> ";
-                cin >> studentName;
-                for (int i = 0; i < 15; i++) {
-                    if (student[i].name == studentName) {
-                        namecheck = 1;
-                        break;
-                    }
-                }
-                if (namecheck == 0) {
-                    cout << "다시 입력해주세요 ..." << endl;
-                }
-            } while (namecheck == 0);
+                cout << "------------------------------" << endl;
+                cout << "1. 전체 과목 석차" << endl;
+                cout << "2. 전공 과목 석차" << endl;
+                cout << "3. 전체 성적 출력" << endl;
+                cout << "------------------------------" << endl;
+                cout << ">> ";
+                cin >> choicesbj;
+                if (choicesbj != 1 && choicesbj != 2 && choicesbj != 3)
+                    cout << "입력 오류 ! 다시 입력해주세요..." << endl;
+            } while (choicesbj != 1 && choicesbj != 2 && choicesbj != 3);
 
-            cout << "과목:\t";
-            for (int i = 0; i < student[0].sbjSize; i++) {
-                cout << student[0].sbj[i].name << "\t";
-            }
-            cout << "1학기\t2학기" << endl;
-            cout << "구분:\t";
-            for (int i = 0; i < student[0].sbjSize; i++) {
-                cout << student[0].sbj[i].type << "\t";
-            }
-            cout << endl;
-            cout << "학기\t";
-            for (int i = 0; i < student[0].sbjSize; i++) {
-                cout << student[0].sbj[i].semester << "\t";
-            }
-            cout << endl;
-            
-            for (int i = 0; i < 15; i++) {
-                if (student[i].name == studentName) {
-                    cout << student[i].name << ": ";
-                    for (int j = 0; j < student[i].sbjSize; j++) {
-                        cout << student[i].sbj[j].score << "\t";
+            if (choicesbj == 1) {
+                do {
+                    cout << "학생 이름을 입력해주세요 >> ";
+                    cin >> studentName;
+                    for (int i = 0; i < 15; i++) {
+                        if (student[i].name == studentName) {
+                            namecheck = 1;
+                            break;
+                        }
                     }
-                    cout << (student[i].totalGrade_1) / 5.0 << "\t" << (student[i].totalGrade_2) / 5.0 << endl;
+                    if (namecheck == 0) {
+                        cout << "다시 입력해주세요 ..." << endl;
+                    }
+                } while (namecheck == 0);
+
+                if (namecheck == 1) {
+                    cout << "과목:\t";
+                    for (int i = 0; i < student[0].sbjSize; i++) {
+                        cout << student[0].sbj[i].name << "\t";
+                    }
+                    cout << endl;
+                    cout << "구분:\t";
+                    for (int i = 0; i < student[0].sbjSize; i++) {
+                        cout << student[0].sbj[i].type << "\t";
+                    }
+                    cout << endl;
+                    cout << "학기:\t";
+                    for (int i = 0; i < student[0].sbjSize; i++) {
+                        cout << student[0].sbj[i].semester << "\t";
+                    }
+                    cout << endl;
+
+                    for (int i = 0; i < 15; i++) {
+                        if (student[i].name == studentName) {
+                            cout << student[i].name << ": ";
+                            for (int j = 0; j < student[i].sbjSize; j++) {
+                                cout << student[i].sbj[j].sbjrnak << "\t";
+                            }
+                        }
+                    }
+                    cout << endl;
+                }
+                cout << endl;
+            }
+
+            else if (choicesbj == 2) {
+                do {
+                    cout << "학생 이름을 입력해주세요 >> ";
+                    cin >> studentName;
+                    for (int i = 0; i < 15; i++) {
+                        if (student[i].name == studentName) {
+                            namecheck = 1;
+                            break;
+                        }
+                    }
+                    if (namecheck == 0) {
+                        cout << "다시 입력해주세요 ..." << endl;
+                    }
+                } while (namecheck == 0);
+
+                if (namecheck == 1) {
+                    cout << "과목:\t";
+                    for (int i = 0; i < student[0].sbjSize; i++) {
+                        if(student[0].sbj[i].type=="전공")
+                            cout << student[0].sbj[i].name << "\t";
+                    }
+                    cout << endl;
+                    cout << "학기:\t";
+                    for (int i = 0; i < student[0].sbjSize; i++) {
+                        if (student[0].sbj[i].type == "전공")
+                            cout << student[0].sbj[i].semester << "\t";
+                    }
+                    cout << endl;
+
+                    for (int i = 0; i < 15; i++) {
+                        if (student[i].name == studentName) {
+                            cout << student[i].name << ": ";
+                            for (int j = 0; j < student[i].sbjSize; j++) {
+                                if (student[i].sbj[j].type == "전공")
+                                    cout << student[i].sbj[j].sbjrnak << "\t";
+                            }
+                        }
+                    }
+                    cout << endl;
+                }
+                cout << endl;
+            }
+
+            else if (choicesbj == 3) {
+                do {
+                    cout << "학생 이름을 입력해주세요 >> ";
+                    cin >> studentName;
+                    for (int i = 0; i < 15; i++) {
+                        if (student[i].name == studentName) {
+                            namecheck = 1;
+                            break;
+                        }
+                    }
+                    if (namecheck == 0) {
+                        cout << "다시 입력해주세요 ..." << endl;
+                    }
+                } while (namecheck == 0);
+
+                if (namecheck == 1) {
+                    cout << "과목:\t";
+                    for (int i = 0; i < student[0].sbjSize; i++) {
+                        cout << student[0].sbj[i].name << "\t";
+                    }
+                    cout << "1학기\t2학기\t총평점" << endl;
+                    cout << "구분:\t";
+                    for (int i = 0; i < student[0].sbjSize; i++) {
+                        cout << student[0].sbj[i].type << "\t";
+                    }
+                    cout << endl;
+                    cout << "학기:\t";
+                    for (int i = 0; i < student[0].sbjSize; i++) {
+                        cout << student[0].sbj[i].semester << "\t";
+                    }
+                    cout << endl;
+
+                    for (int i = 0; i < 15; i++) {
+                        if (student[i].name == studentName) {
+                            cout << student[i].name << ": ";
+                            for (int j = 0; j < student[i].sbjSize; j++) {
+                                cout << student[i].sbj[j].score << "\t";
+                            }
+                            cout << (student[i].totalGrade_1) / 5.0 << "\t" << (student[i].totalGrade_2) / 5.0 << "\t";
+                            cout << (student[i].totalGrade_1 + student[i].totalGrade_2) / 10.0 << endl;
+                        }
+                    }
+                    cout << endl;
                 }
             }
-            cout << endl;
+
             break;
 
         case 3:
@@ -222,30 +371,68 @@ int main() {
                 continue;
             }
 
-            cout << "과목:\t";
-            for (int i = 0; i < student[0].sbjSize; i++) {
-                cout << student[0].sbj[i].name << "\t";
-            }
-            cout << "1학기\t2학기" << endl;
-            cout << "구분:\t";
-            for (int i = 0; i < student[0].sbjSize; i++) {
-                cout << student[0].sbj[i].type << "\t";
-            }
-            cout << endl;
-            cout << "학기\t";
-            for (int i = 0; i < student[0].sbjSize; i++) {
-                cout << student[0].sbj[i].semester << "\t";
-            }
-            cout << endl;
+            do {
+                cout << "------------------------------" << endl;
+                cout << "1. 전체 과목 석차" << endl;
+                cout << "2. 전공 과목 석차" << endl;
+                cout << "------------------------------" << endl;
+                cout << ">> ";
+                cin >> choicesbj;
+                if(choicesbj != 1 && choicesbj != 2)
+                    cout << "입력 오류 ! 다시 입력해주세요..." << endl;
+            } while (choicesbj != 1 && choicesbj != 2);
 
-            for (int i = 0; i < 15; i++) {
-                cout << student[i].name << ": ";
-                for (int j = 0; j < student[i].sbjSize; j++) {
-                    cout << student[i].sbj[j].score << "\t";
+            if (choicesbj == 1) {
+                cout << "과목:\t";
+                for (int i = 0; i < student[0].sbjSize; i++) {
+                    cout << student[0].sbj[i].name << "\t";
                 }
-                cout << (student[i].totalGrade_1)/5.0 << "\t" << (student[i].totalGrade_2)/5.0 << endl;
+                cout << endl;
+                cout << "구분:\t";
+                for (int i = 0; i < student[0].sbjSize; i++) {
+                    cout << student[0].sbj[i].type << "\t";
+                }
+                cout << endl;
+                cout << "학기:\t";
+                for (int i = 0; i < student[0].sbjSize; i++) {
+                    cout << student[0].sbj[i].semester << "\t";
+                }
+                cout << endl;
+
+                for (int i = 0; i < 15; i++) {
+                    cout << student[i].name << ": ";
+                    for (int j = 0; j < student[i].sbjSize; j++) {
+                        cout << student[i].sbj[j].sbjrnak << "\t";
+                    }
+                    cout << endl;
+                }
+                cout << endl;
             }
-            cout << endl;
+
+            else if (choicesbj == 2) {
+                cout << "과목:\t";
+                for (int i = 0; i < student[0].sbjSize; i++) {
+                    if (student[0].sbj[i].type == "전공")
+                        cout << student[0].sbj[i].name << "\t";
+                }
+                cout << endl;
+                cout << "학기:\t";
+                for (int i = 0; i < student[0].sbjSize; i++) {
+                    if (student[0].sbj[i].type == "전공")
+                        cout << student[0].sbj[i].semester << "\t";
+                }
+                cout << endl;
+
+                for (int i = 0; i < 15; i++) {
+                    cout << student[i].name << ": ";
+                    for (int j = 0; j < student[i].sbjSize; j++) {
+                        if (student[i].sbj[j].type == "전공")
+                            cout << student[i].sbj[j].sbjrnak << "\t";
+                    }
+                    cout << endl;
+                }
+                cout << endl;
+            }
             break;
 
         case 4:
