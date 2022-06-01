@@ -216,6 +216,7 @@ int main() {
 
             if (!(is_file_exist)) {
                 cout << "학생 명단이 존재하지 않습니다..." << endl;
+                cout << endl;
                 continue;
             }
 
@@ -372,6 +373,7 @@ int main() {
 
             if (!(is_file_exist)) {
                 cout << "학생 명단이 존재하지 않습니다..." << endl;
+                cout << endl;
                 continue;
             }
 
@@ -444,6 +446,7 @@ int main() {
 
             if (!(is_file_exist)) {
                 cout << "학생 명단이 존재하지 않습니다..." << endl;
+                cout << endl;
                 continue;
             }
 
@@ -486,6 +489,7 @@ int main() {
 
             if (!(is_file_exist)) {
                 cout << "학생 명단이 존재하지 않습니다..." << endl;
+                cout << endl;
                 continue;
             }
 
