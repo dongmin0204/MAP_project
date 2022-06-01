@@ -8,15 +8,15 @@
 
 using namespace std;
 
-class Subject { //°ú¸ñ Å¬·¡½º
+class Subject { //ê³¼ëª© í´ë˜ìŠ¤
 public:
-    string name; //°ú¸ñÀÌ¸§
-    string type; //Àü°ø,±³¾ç ±¸ºĞ
-    int score; //¿øÁ¡¼ö
-    int semester; //ÇĞ±â( 1 / 2 )
-    float grade; //ÇĞÁ¡
-    int sbjrnak = 1; //°ú¸ñ ¼®Â÷ ÃÊ±âÈ­
-    void Grading(); //ÇĞÁ¡ °è»ê ÇÔ¼ö
+    string name; //ê³¼ëª©ì´ë¦„
+    string type; //ì „ê³µ,êµì–‘ êµ¬ë¶„
+    int score; //ì›ì ìˆ˜
+    int semester; //í•™ê¸°( 1 / 2 )
+    float grade; //í•™ì 
+    int sbjrnak = 1; //ê³¼ëª© ì„ì°¨ ì´ˆê¸°í™”
+    void Grading(); //í•™ì  ê³„ì‚° í•¨ìˆ˜
 };
 
 void Subject::Grading() {
@@ -42,23 +42,23 @@ void Subject::Grading() {
 
 class Student {
 public:
-    string name; //ÇĞ»ıÀÌ¸§
-    Subject* sbj; //°ú¸ñ °´Ã¼
-    int sbjSize; //°ú¸ñ Å©±â
-    float totalGrade_1 = 0; //1ÇĞ±â ÇĞÁ¡
-    float totalGrade_2 = 0; //2ÇĞ±â ÇĞÁ¡
-    int rank_1 = 1; //1ÇĞ±â ¼®Â÷ ÃÊ±âÈ­
-    int rank_2 = 1; //2ÇĞ±â ¼®Â÷ ÃÊ±âÈ­
+    string name; //í•™ìƒì´ë¦„
+    Subject* sbj; //ê³¼ëª© ê°ì²´
+    int sbjSize; //ê³¼ëª© í¬ê¸°
+    float totalGrade_1 = 0; //1í•™ê¸° í•™ì 
+    float totalGrade_2 = 0; //2í•™ê¸° í•™ì 
+    int rank_1 = 1; //1í•™ê¸° ì„ì°¨ ì´ˆê¸°í™”
+    int rank_2 = 1; //2í•™ê¸° ì„ì°¨ ì´ˆê¸°í™”
 };
 
 void printMenu(void) {
     cout << "------------------------------" << endl;
-    cout << "1. ¼ºÀû ÀÔ·Â" << endl;
-    cout << "2. °³ÀÎ ¼ºÀû Ãâ·Â" << endl;
-    cout << "3. ÀüÃ¼ ¼ºÀû Ãâ·Â" << endl;
-    cout << "4. ÇĞ±â º° µî¼ö Ãâ·Â" << endl;
-    cout << "5. °ú¸ñº° »óÀ§ 3¸í Ãâ·Â" << endl;
-    cout << "6. Á¾·á" << endl;
+    cout << "1. ì„±ì  ì…ë ¥" << endl;
+    cout << "2. ê°œì¸ ì„±ì  ì¶œë ¥" << endl;
+    cout << "3. ì „ì²´ ì„±ì  ì¶œë ¥" << endl;
+    cout << "4. í•™ê¸° ë³„ ë“±ìˆ˜ ì¶œë ¥" << endl;
+    cout << "5. ê³¼ëª©ë³„ ìƒìœ„ 3ëª… ì¶œë ¥" << endl;
+    cout << "6. ì¢…ë£Œ" << endl;
     cout << "------------------------------" << endl;
 }
 
@@ -67,7 +67,7 @@ void addfstudent(Student student[15], bool& is_exist) {
     vector<string> row;
     string line, word;
 
-    //ÆÄÀÏ ºÒ·¯¿À±â
+    //íŒŒì¼ ë¶ˆëŸ¬ì˜¤ê¸°
     fstream file("name.CSV", ios::in);
     if (file.is_open()) {
         while (getline(file, line)) {
@@ -81,42 +81,42 @@ void addfstudent(Student student[15], bool& is_exist) {
         }
     }
     else {
-        cout << "ÆÄÀÏÀ» Ã£Áö ¸øÇß½À´Ï´Ù..." << endl;
+        cout << "íŒŒì¼ì„ ì°¾ì§€ ëª»í–ˆìŠµë‹ˆë‹¤..." << endl;
         is_exist = false;
         return;
     }
 
-    //ºÒ·¯¿Â ÆÄÀÏ ³»¿ëÀ» student, subject °´Ã¼¿¡ ÇÒ´çÇÏ±â
+    //ë¶ˆëŸ¬ì˜¨ íŒŒì¼ ë‚´ìš©ì„ student, subject ê°ì²´ì— í• ë‹¹í•˜ê¸°
     for (int i = 1; i < content.size(); i++) {
         student[i - 1].name = content[i][1];
         student[i - 1].sbjSize = content[i].size() - 2;
         student[i - 1].sbj = new Subject[content[i].size() - 2];
 
-        for (int j = 2; j < content[i].size(); j++) { //Àü°ø,±³¾ç ±¸ºĞ
+        for (int j = 2; j < content[i].size(); j++) { //ì „ê³µ,êµì–‘ êµ¬ë¶„
             if (content[0][j][0] != '_') {
-                student[i - 1].sbj[j - 2].type = "±³¾ç";
+                student[i - 1].sbj[j - 2].type = "êµì–‘";
                 student[i - 1].sbj[j - 2].name = content[0][j].substr(0, content[0][j].length() - 1);
-                student[i - 1].sbj[j - 2].semester = stoi(content[0][j].substr(content[0][j].length() - 1, content[0][j].length())); //ÇĞ±â ±¸ºĞ
+                student[i - 1].sbj[j - 2].semester = stoi(content[0][j].substr(content[0][j].length() - 1, content[0][j].length())); //í•™ê¸° êµ¬ë¶„
             }
             else {
-                student[i - 1].sbj[j - 2].type = "Àü°ø";
+                student[i - 1].sbj[j - 2].type = "ì „ê³µ";
                 student[i - 1].sbj[j - 2].name = content[0][j].substr(1, content[0][j].length() - 2);
-                student[i - 1].sbj[j - 2].semester = stoi(content[0][j].substr(content[0][j].length() - 1, content[0][j].length())); //ÇĞ±â ±¸ºĞ
+                student[i - 1].sbj[j - 2].semester = stoi(content[0][j].substr(content[0][j].length() - 1, content[0][j].length())); //í•™ê¸° êµ¬ë¶„
             }
 
-            student[i - 1].sbj[j - 2].score = stoi(content[i][j]); //¿øÁ¡¼ö ÇÒ´ç
-            student[i - 1].sbj[j - 2].Grading(); //ÇĞÁ¡À¸·Î º¯È¯
+            student[i - 1].sbj[j - 2].score = stoi(content[i][j]); //ì›ì ìˆ˜ í• ë‹¹
+            student[i - 1].sbj[j - 2].Grading(); //í•™ì ìœ¼ë¡œ ë³€í™˜
 
-            if (student[i - 1].sbj[j - 2].semester == 1) //1ÇĞ±â
+            if (student[i - 1].sbj[j - 2].semester == 1) //1í•™ê¸°
                 student[i - 1].totalGrade_1 += student[i - 1].sbj[j - 2].grade;
-            else if (student[i - 1].sbj[j - 2].semester == 2) //2ÇĞ±â
+            else if (student[i - 1].sbj[j - 2].semester == 2) //2í•™ê¸°
                 student[i - 1].totalGrade_2 += student[i - 1].sbj[j - 2].grade;
         }
     }
 
-    for (int i = 0; i < 14; i++) { //¼®Â÷±¸ÇÏ±â
+    for (int i = 0; i < 14; i++) { //ì„ì°¨êµ¬í•˜ê¸°
         for (int j = i; j < 15; j++) {
-            //1ÇĞ±â
+            //1í•™ê¸°
             if (student[i].totalGrade_1 == student[j].totalGrade_1) {
                 continue;
             }
@@ -126,7 +126,7 @@ void addfstudent(Student student[15], bool& is_exist) {
             else {
                 student[j].rank_1 += 1;
             }
-            //2ÇĞ±â
+            //2í•™ê¸°
             if (student[i].totalGrade_2 == student[j].totalGrade_2) {
                 continue;
             }
@@ -139,27 +139,39 @@ void addfstudent(Student student[15], bool& is_exist) {
         }
     }
 
+    for (int i = 0; i < student[0].sbjSize; i++) { //ê³¼ëª©ë³„ ì„ì°¨ ê³„ì‚°
+        for (int j = 0; j < 14; j++) {
+            for (int k = j; k < 15; k++) {
+                if (student[j].sbj[i].score == student[k].sbj[i].score) {
+                    continue;
+                }
+                else if (student[j].sbj[i].score < student[k].sbj[i].score) {
+                    student[j].sbj[i].sbjrnak += 1;
+                }
+                else {
+                    student[k].sbj[i].sbjrnak += 1;
+                }
+            }
+        }
+    }
+
     file.close();
     is_exist = true;
-    cout << "ÆÄÀÏ ÀĞ±â ¿Ï·á ... " << endl;
+    cout << "íŒŒì¼ ì½ê¸° ì™„ë£Œ ... " << endl;
 }
-void pStudentSwap(Student* &a, Student* &b) {
-    Student* &temp = a;
-    a = b; 
-    b = temp;
-}
-//Á¤·ÄµÈ Student ¹è¿­À» ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+
+//ì •ë ¬ëœ Student ë°°ì—´ì„ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
 Student** sortStudent(Student* student, int semester) {
     Student** temp;
     Student* Swaptemp;
-    temp = new Student*[15]; //Æ÷ÀÎÅÍ ¹è¿­ µ¿Àû ÇÒ´ç
+    temp = new Student * [15]; //í¬ì¸í„° ë°°ì—´ ë™ì  í• ë‹¹
 
-    //temp¿¡ student °´Ã¼ Æ÷ÀÎÅÍ »ğÀÔ
+    //tempì— student ê°ì²´ í¬ì¸í„° ì‚½ì…
     for (int i = 0; i < 15; i++) {
         temp[i] = (student + i);
     }
 
-    //temp¿¡ student °´Ã¼¸¦ ¼øÀ§¿¡ µû¶ó Á¤·Ä
+    //tempì— student ê°ì²´ë¥¼ ìˆœìœ„ì— ë”°ë¼ ì •ë ¬
     for (int i = 14; i > 0; i--) {
         for (int j = 0; j < i; j++) {
             if (semester == 1) {
@@ -178,59 +190,92 @@ Student** sortStudent(Student* student, int semester) {
             }
         }
     }
-    return temp; 
+    return temp;
+}
+
+Student** sortStudent(Student* student, string sbjName, int& index) {
+    Student** temp;
+    Student* Swaptemp;
+    temp = new Student* [15]; //í¬ì¸í„° ë°°ì—´ ë™ì  í• ë‹¹
+
+    //tempì— student ê°ì²´ í¬ì¸í„° ì‚½ì…
+    for (int i = 0; i < 15; i++) {
+        temp[i] = (student + i);
+    }
+
+    //ì›í•˜ëŠ” ê³¼ëª© ì¸ë±ìŠ¤ ì°¾ê¸°
+    for (int i = 0; i < temp[0]->sbjSize; i++) {
+        if (temp[0]->sbj[i].name == sbjName) {
+            index = i;
+            break;
+        }
+    }
+
+    //tempì— student ê°ì²´ë¥¼ ìˆœìœ„ì— ë”°ë¼ ì •ë ¬
+    for (int i = 14; i > 0; i--) {
+        for (int j = 0; j < i; j++) {
+            if (temp[j]->sbj[index].sbjrnak > temp[j + 1]->sbj[index].sbjrnak) {
+                Swaptemp = temp[j];
+                temp[j] = temp[j + 1];
+                temp[j + 1] = Swaptemp;
+            }
+        }
+    }
+    return temp;
+
 }
 
 
 int main() {
     Student student[15];
     bool is_file_exist = false;
-    int cmd = 0; //¸Ş´º ¼±ÅÃ º¯¼ö
-    int choicesbj = 0; //°ú¸ñ ¼±ÅÃ º¯¼ö
-    int namecheck = 0; //ÀÌ¸§ È®ÀÎ º¯¼ö
+    int cmd = 0; //ë©”ë‰´ ì„ íƒ ë³€ìˆ˜
+    int choicesbj = 0; //ê³¼ëª© ì„ íƒ ë³€ìˆ˜
+    int namecheck = 0; //ì´ë¦„ í™•ì¸ ë³€ìˆ˜
     string studentName;
+    string sbjName;
 
-    //¹éµ¿¹Î Ãß°¡·Î »ç¿ëÇÑ º¯¼ö 
-    int semester_size = 0;
+    //ë°±ë™ë¯¼ ì¶”ê°€ë¡œ ì‚¬ìš©í•œ ë³€ìˆ˜ 
     Student** temp;
+    int index;
 
     do {
         printMenu();
-        cout << "¸Ş´º ¼±ÅÃ >> ";
+        cout << "ë©”ë‰´ ì„ íƒ >> ";
         cin >> cmd;
         switch (cmd) {
 
         case 1:
-            cout << "1. ¼ºÀû ÀÔ·Â" << endl;
+            cout << "1. ì„±ì  ì…ë ¥" << endl;
 
-            cout << "ÇĞ»ı ¸í´ÜÀ» ºÒ·¯¿À´Â ÁßÀÔ´Ï´Ù... " << endl;
+            cout << "í•™ìƒ ëª…ë‹¨ì„ ë¶ˆëŸ¬ì˜¤ëŠ” ì¤‘ì…ë‹ˆë‹¤... " << endl;
             addfstudent(student, is_file_exist);
             cout << endl;
             break;
 
         case 2:
-            cout << "2. °³ÀÎ ¼ºÀû Ãâ·Â" << endl;
+            cout << "2. ê°œì¸ ì„±ì  ì¶œë ¥" << endl;
 
             if (!(is_file_exist)) {
-                cout << "ÇĞ»ı ¸í´ÜÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù..." << endl;
+                cout << "í•™ìƒ ëª…ë‹¨ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤..." << endl;
                 continue;
             }
 
             do {
                 cout << "------------------------------" << endl;
-                cout << "1. ÀüÃ¼ °ú¸ñ ¼®Â÷" << endl;
-                cout << "2. Àü°ø °ú¸ñ ¼®Â÷" << endl;
-                cout << "3. ÀüÃ¼ ¼ºÀû Ãâ·Â" << endl;
+                cout << "1. ì „ì²´ ê³¼ëª© ì„ì°¨" << endl;
+                cout << "2. ì „ê³µ ê³¼ëª© ì„ì°¨" << endl;
+                cout << "3. ì „ì²´ ì„±ì  ì¶œë ¥" << endl;
                 cout << "------------------------------" << endl;
                 cout << ">> ";
                 cin >> choicesbj;
                 if (choicesbj != 1 && choicesbj != 2 && choicesbj != 3)
-                    cout << "ÀÔ·Â ¿À·ù ! ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä..." << endl;
+                    cout << "ì…ë ¥ ì˜¤ë¥˜ ! ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”..." << endl;
             } while (choicesbj != 1 && choicesbj != 2 && choicesbj != 3);
 
             if (choicesbj == 1) {
                 do {
-                    cout << "ÇĞ»ı ÀÌ¸§À» ÀÔ·ÂÇØÁÖ¼¼¿ä >> ";
+                    cout << "í•™ìƒ ì´ë¦„ì„ ì…ë ¥í•´ì£¼ì„¸ìš” >> ";
                     cin >> studentName;
                     for (int i = 0; i < 15; i++) {
                         if (student[i].name == studentName) {
@@ -239,22 +284,22 @@ int main() {
                         }
                     }
                     if (namecheck == 0) {
-                        cout << "´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä ..." << endl;
+                        cout << "ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš” ..." << endl;
                     }
                 } while (namecheck == 0);
 
                 if (namecheck == 1) {
-                    cout << "°ú¸ñ:\t";
+                    cout << "ê³¼ëª©:\t";
                     for (int i = 0; i < student[0].sbjSize; i++) {
                         cout << student[0].sbj[i].name << "\t";
                     }
                     cout << endl;
-                    cout << "±¸ºĞ:\t";
+                    cout << "êµ¬ë¶„:\t";
                     for (int i = 0; i < student[0].sbjSize; i++) {
                         cout << student[0].sbj[i].type << "\t";
                     }
                     cout << endl;
-                    cout << "ÇĞ±â:\t";
+                    cout << "í•™ê¸°:\t";
                     for (int i = 0; i < student[0].sbjSize; i++) {
                         cout << student[0].sbj[i].semester << "\t";
                     }
@@ -275,7 +320,7 @@ int main() {
 
             else if (choicesbj == 2) {
                 do {
-                    cout << "ÇĞ»ı ÀÌ¸§À» ÀÔ·ÂÇØÁÖ¼¼¿ä >> ";
+                    cout << "í•™ìƒ ì´ë¦„ì„ ì…ë ¥í•´ì£¼ì„¸ìš” >> ";
                     cin >> studentName;
                     for (int i = 0; i < 15; i++) {
                         if (student[i].name == studentName) {
@@ -284,20 +329,20 @@ int main() {
                         }
                     }
                     if (namecheck == 0) {
-                        cout << "´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä ..." << endl;
+                        cout << "ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš” ..." << endl;
                     }
                 } while (namecheck == 0);
 
                 if (namecheck == 1) {
-                    cout << "°ú¸ñ:\t";
+                    cout << "ê³¼ëª©:\t";
                     for (int i = 0; i < student[0].sbjSize; i++) {
-                        if (student[0].sbj[i].type == "Àü°ø")
+                        if (student[0].sbj[i].type == "ì „ê³µ")
                             cout << student[0].sbj[i].name << "\t";
                     }
                     cout << endl;
-                    cout << "ÇĞ±â:\t";
+                    cout << "í•™ê¸°:\t";
                     for (int i = 0; i < student[0].sbjSize; i++) {
-                        if (student[0].sbj[i].type == "Àü°ø")
+                        if (student[0].sbj[i].type == "ì „ê³µ")
                             cout << student[0].sbj[i].semester << "\t";
                     }
                     cout << endl;
@@ -306,7 +351,7 @@ int main() {
                         if (student[i].name == studentName) {
                             cout << student[i].name << ": ";
                             for (int j = 0; j < student[i].sbjSize; j++) {
-                                if (student[i].sbj[j].type == "Àü°ø")
+                                if (student[i].sbj[j].type == "ì „ê³µ")
                                     cout << student[i].sbj[j].sbjrnak << "\t";
                             }
                         }
@@ -318,7 +363,7 @@ int main() {
 
             else if (choicesbj == 3) {
                 do {
-                    cout << "ÇĞ»ı ÀÌ¸§À» ÀÔ·ÂÇØÁÖ¼¼¿ä >> ";
+                    cout << "í•™ìƒ ì´ë¦„ì„ ì…ë ¥í•´ì£¼ì„¸ìš” >> ";
                     cin >> studentName;
                     for (int i = 0; i < 15; i++) {
                         if (student[i].name == studentName) {
@@ -327,22 +372,22 @@ int main() {
                         }
                     }
                     if (namecheck == 0) {
-                        cout << "´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä ..." << endl;
+                        cout << "ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš” ..." << endl;
                     }
                 } while (namecheck == 0);
 
                 if (namecheck == 1) {
-                    cout << "°ú¸ñ:\t";
+                    cout << "ê³¼ëª©:\t";
                     for (int i = 0; i < student[0].sbjSize; i++) {
                         cout << student[0].sbj[i].name << "\t";
                     }
-                    cout << "1ÇĞ±â\t2ÇĞ±â\tÃÑÆòÁ¡" << endl;
-                    cout << "±¸ºĞ:\t";
+                    cout << "1í•™ê¸°\t2í•™ê¸°\tì´í‰ì " << endl;
+                    cout << "êµ¬ë¶„:\t";
                     for (int i = 0; i < student[0].sbjSize; i++) {
                         cout << student[0].sbj[i].type << "\t";
                     }
                     cout << endl;
-                    cout << "ÇĞ±â:\t";
+                    cout << "í•™ê¸°:\t";
                     for (int i = 0; i < student[0].sbjSize; i++) {
                         cout << student[0].sbj[i].semester << "\t";
                     }
@@ -365,36 +410,36 @@ int main() {
             break;
 
         case 3:
-            cout << "3. ÀüÃ¼ ¼ºÀû Ãâ·Â" << endl;
+            cout << "3. ì „ì²´ ì„±ì  ì¶œë ¥" << endl;
 
             if (!(is_file_exist)) {
-                cout << "ÇĞ»ı ¸í´ÜÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù..." << endl;
+                cout << "í•™ìƒ ëª…ë‹¨ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤..." << endl;
                 continue;
             }
 
             do {
                 cout << "------------------------------" << endl;
-                cout << "1. ÀüÃ¼ °ú¸ñ ¼®Â÷" << endl;
-                cout << "2. Àü°ø °ú¸ñ ¼®Â÷" << endl;
+                cout << "1. ì „ì²´ ê³¼ëª© ì„ì°¨" << endl;
+                cout << "2. ì „ê³µ ê³¼ëª© ì„ì°¨" << endl;
                 cout << "------------------------------" << endl;
                 cout << ">> ";
                 cin >> choicesbj;
                 if (choicesbj != 1 && choicesbj != 2)
-                    cout << "ÀÔ·Â ¿À·ù ! ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä..." << endl;
+                    cout << "ì…ë ¥ ì˜¤ë¥˜ ! ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”..." << endl;
             } while (choicesbj != 1 && choicesbj != 2);
 
             if (choicesbj == 1) {
-                cout << "°ú¸ñ:\t";
+                cout << "ê³¼ëª©:\t";
                 for (int i = 0; i < student[0].sbjSize; i++) {
                     cout << student[0].sbj[i].name << "\t";
                 }
                 cout << endl;
-                cout << "±¸ºĞ:\t";
+                cout << "êµ¬ë¶„:\t";
                 for (int i = 0; i < student[0].sbjSize; i++) {
                     cout << student[0].sbj[i].type << "\t";
                 }
                 cout << endl;
-                cout << "ÇĞ±â:\t";
+                cout << "í•™ê¸°:\t";
                 for (int i = 0; i < student[0].sbjSize; i++) {
                     cout << student[0].sbj[i].semester << "\t";
                 }
@@ -411,15 +456,15 @@ int main() {
             }
 
             else if (choicesbj == 2) {
-                cout << "°ú¸ñ:\t";
+                cout << "ê³¼ëª©:\t";
                 for (int i = 0; i < student[0].sbjSize; i++) {
-                    if (student[0].sbj[i].type == "Àü°ø")
+                    if (student[0].sbj[i].type == "ì „ê³µ")
                         cout << student[0].sbj[i].name << "\t";
                 }
                 cout << endl;
-                cout << "ÇĞ±â:\t";
+                cout << "í•™ê¸°:\t";
                 for (int i = 0; i < student[0].sbjSize; i++) {
-                    if (student[0].sbj[i].type == "Àü°ø")
+                    if (student[0].sbj[i].type == "ì „ê³µ")
                         cout << student[0].sbj[i].semester << "\t";
                 }
                 cout << endl;
@@ -427,7 +472,7 @@ int main() {
                 for (int i = 0; i < 15; i++) {
                     cout << student[i].name << ": ";
                     for (int j = 0; j < student[i].sbjSize; j++) {
-                        if (student[i].sbj[j].type == "Àü°ø")
+                        if (student[i].sbj[j].type == "ì „ê³µ")
                             cout << student[i].sbj[j].sbjrnak << "\t";
                     }
                     cout << endl;
@@ -437,35 +482,34 @@ int main() {
             break;
 
         case 4:
-            cout << "4. ÇĞ±â º° µî¼ö Ãâ·Â" << endl;
+            cout << "4. í•™ê¸° ë³„ ë“±ìˆ˜ ì¶œë ¥" << endl;
 
             if (!(is_file_exist)) {
-                cout << "ÇĞ»ı ¸í´ÜÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù..." << endl;
+                cout << "í•™ìƒ ëª…ë‹¨ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤..." << endl;
                 continue;
             }
 
             int semester;
             do {
-                cout << "ÇĞ±â¸¦ ÀÔ·ÂÇØÁÖ¼¼¿ä(1 or 2) >> ";
+                cout << "í•™ê¸°ë¥¼ ì…ë ¥í•´ì£¼ì„¸ìš”(1 or 2) >> ";
                 cin >> semester;
-                if (semester != 1 && semester != 2) { cout << "´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä... " << endl; }
+                if (semester != 1 && semester != 2) { cout << "ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”... " << endl; }
             } while (semester != 1 && semester != 2);
 
-            cout << "ÀÌ¸§\t";
+            cout << "ì´ë¦„\t";
             for (int i = 0; i < student[0].sbjSize; i++) {
                 if (student[0].sbj[i].semester == semester)
                 {
                     cout << student[0].sbj[i].name << "\t";
-                    semester_size++;
                 }
                 else
                     continue;
             }
-            cout << "µî¼ö" << endl;
+            cout << "ë“±ìˆ˜" << endl;
 
-            temp = sortStudent(student, semester); //ÇĞ±â´ç °ú¸ñ¼ö ¸¸Å­ ÇÒ´çÇØ¼­ Á¤·ÄÇÏ±â À§ÇÑ Æ÷ÀÎÅÍ ¹è¿­ »ı¼º
-            
-            
+            temp = sortStudent(student, semester); //í•™ê¸°ë‹¹ ê³¼ëª©ìˆ˜ ë§Œí¼ í• ë‹¹í•´ì„œ ì •ë ¬í•˜ê¸° ìœ„í•œ í¬ì¸í„° ë°°ì—´ ìƒì„±
+
+
             for (int i = 0; i < 15; i++) {
                 cout << temp[i]->name << ": ";
                 for (int j = 0; j < temp[i]->sbjSize; j++) {
@@ -481,38 +525,47 @@ int main() {
             }
 
             break;
-        case 5: //¹Ì¿Ï
-            cout << "5. °ú¸ñº° »óÀ§ 3¸í Ãâ·Â" << endl;
+        case 5: //ë¯¸ì™„
+            cout << "5. ê³¼ëª©ë³„ ìƒìœ„ 3ëª… ì¶œë ¥" << endl;
 
             if (!(is_file_exist)) {
-                cout << "ÇĞ»ı ¸í´ÜÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù..." << endl;
+                cout << "í•™ìƒ ëª…ë‹¨ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤..." << endl;
                 continue;
             }
-
-
-            for (int i = 0; i < 15; i++) {
-                cout << temp[i]->name << ": ";
-                for (int j = 0; j < temp[i]->sbjSize; j++) {
-                    if (temp[i]->sbj[j].semester == semester)
-                        cout << temp[i]->sbj[j].score << "\t";
-                    else
-                        continue;
-                }
-                if (semester == 1)
-                    cout << temp[i]->rank_1 << endl;
-                else if (semester == 2)
-                    cout << temp[i]->rank_2 << endl;
-            }
             
+            namecheck = 0;
+            do {
+                cout << "ê³¼ëª© ì´ë¦„ì„ ì…ë ¥í•´ì£¼ì„¸ìš” >> ";
+                cin >> sbjName;
+                for (int i = 0; i < student[0].sbjSize; i++) {
+                    if (student[0].sbj[i].name == sbjName) {
+                        namecheck = 1;
+                        break;
+                    }
+                }
+                if (namecheck == 0) {
+                    cout << "ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš” ..." << endl;
+                }
+            } while (namecheck == 0);
+
+            temp = sortStudent(student, sbjName, index);
+
+            cout << "ì´ë¦„\t" << sbjName << "\të“±ìˆ˜" << endl;
+
+            for (int i = 0; i < 3; i++) {
+                cout << temp[i]->name << ": ";
+                cout << temp[i]->sbj[index].score << "\t";
+                cout << temp[i]->sbj[index].sbjrnak << endl;
+            }
             break;
         case 6:
             break;
         default:
-            cout << "ÀÔ·Â ¿À·ù ! ´Ù½Ã ÀÔ·ÂÇØÁÖ¼¼¿ä..." << endl;
+            cout << "ì…ë ¥ ì˜¤ë¥˜ ! ë‹¤ì‹œ ì…ë ¥í•´ì£¼ì„¸ìš”..." << endl;
             break;
         }
     } while (cmd != 6);
-    cout << "ÇÁ·Î±×·¥À» Á¾·áÇÕ´Ï´Ù." << endl;
+    cout << "í”„ë¡œê·¸ë¨ì„ ì¢…ë£Œí•©ë‹ˆë‹¤." << endl;
 
     return 0;
 }
